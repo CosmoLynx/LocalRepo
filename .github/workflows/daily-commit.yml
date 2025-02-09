@@ -3,27 +3,24 @@ name: Daily Commit
 on:
   schedule:
     - cron: '30 2 * * *'  # Runs daily at 2:30 AM UTC
-  workflow_dispatch:  # Allows manual triggering
+  workflow_dispatch:  # Allows manual execution
 
 jobs:
-  commit:
+  commit_job:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Configure Git
+      - name: Add a new commit
         run: |
-          git config --global user.name "GitHub Actions Bot"
+          date >> daily_commit.txt
+          git config --global user.name "GitHub Action"
           git config --global user.email "23f3001400@ds.study.iitm.ac.in"
-
-      - name: Make changes
-        run: |
-          echo "Last run: $(date)" > last_run.txt
-
-      - name: Commit changes
-        run: |
-          git add .
-          git commit -m "Automated daily commit $(date)"
+          git add daily_commit.txt
+          git commit -m "Automated commit - $(date)"
           git push
+          
+      - name: Verify Email Step (23f3001400@ds.study.iitm.ac.in)
+        run: echo "This step includes the required email"
